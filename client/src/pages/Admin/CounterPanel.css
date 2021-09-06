@@ -1,16 +1,38 @@
-#counter-panel #current-count-text {
+#count-panel {
+    height: 50%;
+}
+
+#count-panel #count-text {
     color: #ccc;
-    font-size: calc(8rem + 15vw);
+    font-size: 30vh;
 }
 
-#counter-panel .btn {
-    margin: calc(0.25rem + 0.5vw);
+#control-panel {
+    height: 50%;
+    padding: 0 4vmin 0 4vmin;
+    max-width: 100vmin;
 }
 
-#counter-panel .btn-sign {
-    font-size: calc(4rem + 5vw);
+#click-controls {
+    height: 70%;
+    padding: 0;
 }
 
-#counter-panel .btn-text {
-    font-size: calc(1rem + 1vw);
+#click-controls .btn {
+    font-size: 15vmin;
+    margin: 1vmin;
+}
+
+#special-controls{
+    height: 30%;
+    padding: 0;
+}
+
+#special-controls .btn {
+    font-size: 4vmin;
+    margin: 1vmin;
+}
+
+#control-panel .col {
+    padding: 0;
 }

@@ -15,14 +15,14 @@ function Admin() {
     }, []);
 
     return (
-        <Container className="vh-100 px-4">
+        <div className="vh-100">
             {loggedIn !== undefined
                 ? loggedIn
                     ? <CounterPanel />
                     : <Login setLoggedIn={setLoggedIn} />
                 : <div className="page-center"><Spinner animation="border" variant="light" /></div>
             }
-        </Container>
+        </div>
     );
 }
   

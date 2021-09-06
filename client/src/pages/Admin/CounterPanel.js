@@ -97,34 +97,38 @@ function CounterPanel() {
     return (
         <>
             {failed && <Alert variant="danger">An error in connection to server...</Alert>}
-            <Col className="d-flex flex-column h-100 text-center" id="counter-panel">
-                <Row className="my-5">
-                    <h1 id="current-count-text">{context.count}</h1>
-                </Row>
-                <Row className="flex-grow-1">
-                    <Col className="d-grid">
-                        <Button variant="danger" size="lg" className="btn-sign" disabled={failed} onClick={onDownClick}>
-                            -
-                        </Button>
-                    </Col>
-                    <Col className="d-grid">
-                        <Button variant="success" size="lg" className="btn-sign" disabled={failed} onClick={onUpClick}>
-                            +
-                        </Button>
-                    </Col>
-                </Row>
-                <Row className="">
-                    <Col className="d-grid">
-                        <Button variant="warning" size="lg" className="btn-text" disabled={failed} onClick={onResetClick}>
-                            Reset count
-                        </Button>
-                    </Col>
-                    <Col className="d-grid">
-                        <Button variant="light" size="lg" className="btn-text" disabled={failed} onClick={onSetMaxClick}>
-                            Change max ({context.maxCount})
-                        </Button>
-                    </Col>
-                </Row>
+            <Col className="h-100" id="counter-panel">
+                <div id="count-panel" className="d-flex justify-content-center">
+                    <div id="count-text" className="my-auto">{context.count}</div>
+                </div>
+                <div className="h-100 d-flex justify-content-center">
+                    <div id="control-panel" className="flex-grow-1">
+                        <Row id="click-controls">
+                            <Col className="d-grid">
+                                <Button variant="danger" size="lg" className="btn-sign" disabled={failed} onClick={onDownClick}>
+                                    -
+                                </Button>
+                            </Col>
+                            <Col className="d-grid">
+                                <Button variant="success" size="lg" className="btn-sign" disabled={failed} onClick={onUpClick}>
+                                    +
+                                </Button>   
+                            </Col>
+                        </Row>
+                        <Row id="special-controls">
+                            <Col className="d-grid">
+                                <Button variant="warning" disabled={failed} onClick={onResetClick}>
+                                    Reset count
+                                </Button>
+                            </Col>
+                            <Col className="d-grid">
+                                <Button variant="light" disabled={failed} onClick={onSetMaxClick}>
+                                    Change max ({context.maxCount})
+                                </Button>
+                            </Col>
+                        </Row>
+                    </div>
+                </div>
             </Col>
             <Modal
                 show={showModal}

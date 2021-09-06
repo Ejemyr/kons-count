@@ -1,5 +1,6 @@
 import React from "react";
 import { Row, Col } from "react-bootstrap";
+import './CountDisplay.css';
 
 function CountDisplay({count, lastUpdate, maxCount} = {count: 0, lastUpdate: 0, maxCount: 0}) {
 
@@ -18,25 +19,25 @@ function CountDisplay({count, lastUpdate, maxCount} = {count: 0, lastUpdate: 0, 
 
     return (
         <Row className="h-100 justify-content-center">
-            <Col xs={12} md={10} lg={9} xl={8} className="my-auto">
-                <Row className="text-light mb-5">
-                    <h1>
+            <Col className="my-auto">
+                <Row>
+                    <div id="current-count-header" className="text-light">
                         Current count in Kons:
-                    </h1>
+                    </div>
                 </Row>
                 <Row className="justify-content-center">
-                    <Col className="outer-box">
-                        <Row className="px-5 justify-content-center">
-                            <Col xs={4} className="d-flex flex-grow-1 number-box my-5 justify-content-center">{count}</Col>
-                            <Col className="slashBox my-5 text-center">/</Col>
-                            <Col xs={4} className="d-flex flex-grow-1 number-box my-5 justify-content-center">{maxCount}</Col>
+                    <div className="outer-box">
+                        <Row className="h-100 justify-content-center text-center">
+                            <div className="d-flex number-box my-auto justify-content-center"><div className="my-auto">{count}</div></div>
+                            <div className="d-flex slash-box my-auto justify-content-center"><div className="my-auto">/</div></div>
+                            <div className="d-flex number-box my-auto justify-content-center"><div className="my-auto">{maxCount}</div></div>
                         </Row>
-                    </Col>
+                    </div>
                 </Row>
-                <Row  className="text-light mt-4">
-                    <h4>
+                <Row>
+                    <div id="last-reported-text" className="text-light">
                         Last reported on: <span id="time">{lastUpdateDateString}</span>
-                    </h4>
+                    </div>
                 </Row>
             </Col>
         </Row>
