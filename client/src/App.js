@@ -67,7 +67,7 @@ function App() {
         setCount: setCount
     };
 
-    const rootPath = process.env.ROOT_PATH || "";
+    const rootPath = process.env.REACT_APP_ROOT_PATH || "";
 
     return (
         <Router basename={rootPath}>
