@@ -19,11 +19,11 @@ db.on('error', function (err) {
 });
 
 const app = express();
-const port = 8000;
+const port = process.env.PORT;
 
 
 app.use(cors({
-    origin: "http://localhost:3000",
+    origin: process.env.CLIENT_ORIGIN,
     methods: ['POST', 'PUT', 'GET', 'OPTIONS', 'HEAD'],
     credentials: true
 }));
