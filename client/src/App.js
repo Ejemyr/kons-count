@@ -70,14 +70,14 @@ function App() {
     const rootPath = process.env.ROOT_PATH || "";
 
     return (
-        <Router>
+        <Router basename={rootPath}>
             <div>
                 <Switch>
                     <CountContext.Provider value={contextValue}>
-                        <Route path={rootPath + "/admin"} exact={true}>
+                        <Route path="/admin" exact={true}>
                             <Admin />
                         </Route>
-                        <Route path={rootPath + "/"} exact={true}>
+                        <Route path="/" exact={true}>
                             <Home />
                         </Route>
                     </CountContext.Provider>
