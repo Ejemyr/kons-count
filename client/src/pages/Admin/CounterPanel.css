@@ -1,5 +1,5 @@
 #count-panel {
-    height: 50%;
+    height: 45%;
 }
 
 #count-panel #count-text {
@@ -8,7 +8,7 @@
 }
 
 #control-panel {
-    height: 50%;
+    height: 45%;
     padding: 0 4vmin 0 4vmin;
     max-width: 100vmin;
 }
