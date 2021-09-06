@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Container, Spinner } from 'react-bootstrap';
+import { Spinner } from 'react-bootstrap';
 import { getLoggedIn } from "../../serverUtils/authentication";
 import CounterPanel from "./CounterPanel";
 import Login from "./Login";
