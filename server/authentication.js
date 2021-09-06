@@ -1,5 +1,5 @@
 (function() {
-    const keys = require('./service_account_auth.json');
+    const keys = require(process.env.SERVICE_ACCOUNT_AUTH_FILE_PATH);
     const { JWT, OAuth2Client } = require('google-auth-library');
 
     const accessibleScopes = [
@@ -10,17 +10,17 @@
         const client = new JWT({
             email: keys.client_email,
             key: keys.private_key,
-            subject: "admin.styret@fysiksektionen.se",
+            subject: process.env.SERVICE_ACCOUNT_SUBJECT,
             scopes: accessibleScopes
         });
 
-        return await client.request({ url });
+        return await client.request({ url }).catch(() => {});
     }
 
     const getGroupMembers = async function(groupKey, includeDerived = true) {
         return (
             await callGoogleAPI('https://admin.googleapis.com/admin/directory/v1/groups/' + groupKey + '/members?includeDerivedMembership=' + includeDerived.toString())
-        ).data.members;
+        )?.data?.members || [];
     };
 
     const userInGroup = async function(userId, groupKey) {
