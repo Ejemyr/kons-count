@@ -1,0 +1,13 @@
+.outer-box {
+    background: #E08206 0% 0% no-repeat padding-box;
+    border: calc(15px + 1vw) solid hsl(36, 100%, 50%);
+	border-radius: calc(50px + 4vw);
+
+    font-size: calc(1rem + 10vw);
+}
+
+.number-box {
+    background: #FFFFFF 0% 0% no-repeat padding-box;
+    border: calc(3px + 0.5vw) solid #FF9900;
+    border-radius: calc(10px + 4vw);
+}

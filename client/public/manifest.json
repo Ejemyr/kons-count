@@ -1,0 +1,8 @@
+{
+  "short_name": "KonsCount",
+  "name": "Konsulatet counter",
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#E08206",
+  "background_color": "#002838"
+}
