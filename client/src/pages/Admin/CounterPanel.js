@@ -1,9 +1,10 @@
 import React, { useCallback, useContext, useState } from "react";
 import { Row, Col, Button, Alert, Modal, InputGroup, Form } from "react-bootstrap";
 import './CounterPanel.css';
-
 import { CountContext } from '../../contexts';
-import { decreaseCount, increaseCount, resetCount, setMaxCount } from "../../serverUtils/count";
+import { decreaseCount, increaseCount, resetCount, setMaxCount, setLive } from "../../serverUtils/count";
+import { FormControlLabel } from '@material-ui/core';
+import { IOSSwitch } from "./IOSSwitch";
 
 function CounterPanel() {
     const maxFailCount = 10;
@@ -12,6 +13,7 @@ function CounterPanel() {
     const context = useContext(CountContext);
     const [showModal, setShowModal] = useState(false);
     const [maxCountModalState, setMaxCountModalState] = useState(undefined);
+    const [liveSwitchState, setLiveSwitchState] = useState(context.live);
 
     const onUpClick = useCallback((failCount = 0) => {
         increaseCount()
@@ -94,41 +96,60 @@ function CounterPanel() {
     }
     const invalidModalInput = maxCountModalState === undefined || Number.isNaN(maxCountModalState) || maxCountModalState < 0;
 
+    const onLiveSwitchChange = useCallback((event, failCount = 0) => {
+        console.log(event.target.checked);
+        setLiveSwitchState(event.target.checked);
+        setLive(event.target.checked)
+            .catch(async () => {
+                failCount++;
+                if (failCount < maxFailCount) {
+                    await new Promise(resolve => setTimeout(resolve, 50));
+                    setLive(event.target.checked, failCount);
+                } else {
+                    setFailed(true);
+                }
+            });
+    }, []);
+
     return (
-        <>
-            {failed && <Alert variant="danger">An error in connection to server...</Alert>}
+        <div className="d-flex justify-content-center">
             <Col className="h-100" id="counter-panel">
+                {failed && <Alert variant="danger">An error in connection to server...</Alert>}
+                <div id="live-panel" className="d-flex px-3 pt-3">
+                    <FormControlLabel
+                        control={<IOSSwitch checked={liveSwitchState || false} onChange={onLiveSwitchChange} name="live-check" />}
+                        label={"Counter is " + (liveSwitchState ? "live" : "off")}
+                    />
+                </div>
                 <div id="count-panel" className="d-flex justify-content-center">
                     <div id="count-text" className="my-auto">{context.count}</div>
                 </div>
-                <div className="h-100 d-flex justify-content-center">
-                    <div id="control-panel" className="flex-grow-1">
-                        <Row id="click-controls">
-                            <Col className="d-grid">
-                                <Button variant="danger" size="lg" className="btn-sign" disabled={failed} onClick={onDownClick}>
-                                    -
-                                </Button>
-                            </Col>
-                            <Col className="d-grid">
-                                <Button variant="success" size="lg" className="btn-sign" disabled={failed} onClick={onUpClick}>
-                                    +
-                                </Button>   
-                            </Col>
-                        </Row>
-                        <Row id="special-controls">
-                            <Col className="d-grid">
-                                <Button variant="warning" disabled={failed} onClick={onResetClick}>
-                                    Reset count
-                                </Button>
-                            </Col>
-                            <Col className="d-grid">
-                                <Button variant="light" disabled={failed} onClick={onSetMaxClick}>
-                                    Change max ({context.maxCount})
-                                </Button>
-                            </Col>
-                        </Row>
-                    </div>
-                </div>
+                <Col id="control-panel" className="flex-grow-1">
+                    <Row id="click-controls">
+                        <Col className="d-grid">
+                            <Button variant="danger" size="lg" className="btn-sign" disabled={failed} onClick={onDownClick}>
+                                -
+                            </Button>
+                        </Col>
+                        <Col className="d-grid">
+                            <Button variant="success" size="lg" className="btn-sign" disabled={failed} onClick={onUpClick}>
+                                +
+                            </Button>   
+                        </Col>
+                    </Row>
+                    <Row id="special-controls">
+                        <Col className="d-grid">
+                            <Button variant="warning" disabled={failed} onClick={onResetClick}>
+                                Reset count
+                            </Button>
+                        </Col>
+                        <Col className="d-grid">
+                            <Button variant="light" disabled={failed} onClick={onSetMaxClick}>
+                                Change max ({context.maxCount})
+                            </Button>
+                        </Col>
+                    </Row>
+                </Col>
             </Col>
             <Modal
                 show={showModal}
@@ -160,7 +181,7 @@ function CounterPanel() {
                     </Button>
                 </Modal.Footer>
             </Modal>
-        </>
+        </div>
     );
 }
   

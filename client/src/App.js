@@ -15,6 +15,7 @@ function App() {
 
     const maxFailCount = 10;
 
+    const [live, setLive] = useState(undefined);
     const [count, setCount] = useState(undefined);
     const [lastUpdate, setLastUpdate] = useState(undefined);
     const [maxCount, setMaxCount] = useState(undefined);
@@ -23,9 +24,10 @@ function App() {
 
     const updateCountContext = useCallback(async () => {
         return await getCountInfo().then(countInfo => {
-            setCount(parseInt(countInfo.count));
-            setLastUpdate(parseInt(countInfo.lastUpdate));
-            setMaxCount(parseInt(countInfo.maxCount));
+            setLive(countInfo.live === "true");
+            setCount(parseInt(countInfo?.count));
+            setLastUpdate(parseInt(countInfo?.lastUpdate));
+            setMaxCount(parseInt(countInfo?.maxCount));
             setFailed(false);
 
             return true;
@@ -60,6 +62,7 @@ function App() {
 
 
     const contextValue = {
+        live: live,
         count: count,
         lastUpdate: lastUpdate,
         maxCount: maxCount,

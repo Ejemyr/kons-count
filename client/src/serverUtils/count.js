@@ -19,3 +19,7 @@ export const resetCount = async (timeout = 400) => {
 export const setMaxCount = async (maxCount, timeout = 400) => {
     return await postApi('/maxCount/set', {value: maxCount}, timeout);
 };
+
+export const setLive = async (live, timeout = 400) => {
+    return await postApi('/setLive', {value: live.toString()}, timeout);
+};

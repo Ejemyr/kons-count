@@ -1,22 +1,25 @@
 import React from "react";
-import { Alert, Container } from "react-bootstrap";
+import { Alert } from "react-bootstrap";
 import Spinner from 'react-bootstrap/Spinner';
 import { CountContext } from "../../contexts";
 import CountDisplay from "./CountDisplay";
 import '../DivStyles.css';
+import NotLive from "./NotLive";
 
 function Home() {
     return (
         <CountContext.Consumer>
             {context => 
-                <Container className="vh-100 px-4" fluid>
+                <div className="vh-100">
                     {!context.failed
-                        ? (context.count !== undefined)
-                            ? <CountDisplay count={context.count} lastUpdate={context.lastUpdate} maxCount={context.maxCount} />
+                        ? context.live !== undefined
+                            ? context.live
+                                ? <CountDisplay count={context.count} lastUpdate={context.lastUpdate} maxCount={context.maxCount} />
+                                : <NotLive />
                             : <div className="page-center"><Spinner animation="border" variant="light"/></div>
                         : <Alert variant="danger">Failed to fetch data from server.<br/>Either server is down or you've lost your connection.</Alert>
                     }
-                </Container>
+                </div>
             }
         </CountContext.Consumer>
     );

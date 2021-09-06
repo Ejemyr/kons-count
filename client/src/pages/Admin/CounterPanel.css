@@ -1,5 +1,19 @@
+#counter-panel {
+    max-width: 100vmin;
+    padding: 0 4vmin 0 4vmin;
+}
+
+#live-panel {
+    height: 5%;
+}
+
+#live-panel .MuiFormControlLabel-label {
+    font-size: calc(15px + 0.75vmin);
+    color: #ccc;
+}
+
 #count-panel {
-    height: 45%;
+    height: 40%;
 }
 
 #count-panel #count-text {
@@ -9,8 +23,6 @@
 
 #control-panel {
     height: 45%;
-    padding: 0 4vmin 0 4vmin;
-    max-width: 100vmin;
 }
 
 #click-controls {
@@ -31,8 +43,4 @@
 #special-controls .btn {
     font-size: 4vmin;
     margin: 1vmin;
-}
-
-#control-panel .col {
-    padding: 0;
 }

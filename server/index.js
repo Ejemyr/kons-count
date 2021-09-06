@@ -14,6 +14,7 @@ var db = redis.createClient();
 const countKey = "count";
 const maxCountKey = "maxCount";
 const lastUpdateKey = "lastUpdate";
+const liveKey = "live";
 db.on('error', function (err) {
     console.log('Error ' + err);
 });
@@ -34,19 +35,15 @@ app.use(bodyParser.json());
 app.use(cookieParser());
 
 
-const oneDay = 1000 * 60 * 60 * 12;
+const halfDay = 1000 * 60 * 60 * 12;
 app.use(session({
     secret: process.env.SESSION_SECRET,
     name: 'session',
     store: new RedisStore({ client: db }),
-    cookie: { secure: false, maxAge: oneDay },
+    cookie: { secure: process.env.NODE_ENV === "production", maxAge: halfDay },
     saveUninitialized: true,
     resave: false
 }));
-if (process.env.NODE_ENV === "production") {
-    session.cookie.secure = true;
-    app.set('trust proxy', 1);
-}
 
 const requireLoggedIn = (req, res, next) => {
     if (req.session?.authenticated) {
@@ -93,12 +90,36 @@ const getRedisValuePromise = (key) => {
     })
 }
 
+app.post('/setLive', (req, res) => {
+    try {
+        if (req.body.value === "true" || req.body.value === "false") {
+            db.SET(liveKey, req.body.value);
+            res.json({value: req.body.value})
+        } else {
+            res.status(400).json({error: "Value is not parsable to a boolean value"});
+        }
+    } catch (error) {
+        res.status(400).json({error: "Missformatted data"});
+    }
+
+    return res;
+});
+
 app.get('/countInfo', async (req, res) => {
-    const resValue = {
-        count: await getRedisValuePromise(countKey),
-        lastUpdate: await getRedisValuePromise(lastUpdateKey),
-        maxCount: await getRedisValuePromise(maxCountKey),
-    };
+    const live = await getRedisValuePromise(liveKey);
+    var resValue;
+    if (live === "true" || req.session?.authenticated) {
+        resValue = {
+            live: live,
+            count: await getRedisValuePromise(countKey),
+            lastUpdate: await getRedisValuePromise(lastUpdateKey),
+            maxCount: await getRedisValuePromise(maxCountKey),
+        };
+    } else {
+        resValue = {
+            live: live
+        };
+    }
     res.json(resValue);
     return res;
 });
@@ -145,4 +166,5 @@ app.listen(port, () => {
     db.SETNX(countKey, "0");
     db.SETNX(maxCountKey, "50");
     db.SETNX(lastUpdateKey, Math.round(Date.now() / 1000));
+    db.SETNX(liveKey, "true");
 });
