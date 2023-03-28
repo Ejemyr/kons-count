@@ -2,7 +2,7 @@ import React, { useCallback, useContext, useState } from "react";
 import { Row, Col, Button, Alert, Modal, InputGroup, Form } from "react-bootstrap";
 import './CounterPanel.css';
 import { CountContext } from '../../contexts';
-import { decreaseCount, increaseCount, resetCount, setMaxCount, setLive } from "../../serverUtils/count";
+import { decreaseCountMembers, increaseCountMembers, decreaseCountGuests, increaseCountGuests, resetCount, setMaxCount, setLive } from "../../serverUtils/count";
 import { FormControlLabel } from '@material-ui/core';
 import { IOSSwitch } from "./IOSSwitch";
 
@@ -13,35 +13,34 @@ function CounterPanel() {
     const context = useContext(CountContext);
     const [showModal, setShowModal] = useState(false);
     const [maxCountModalState, setMaxCountModalState] = useState(undefined);
-    const [liveSwitchState, setLiveSwitchState] = useState(context.live);
 
-    const onUpClick = useCallback((failCount = 0) => {
-        increaseCount()
+    const onUpClickMember = useCallback((button, failCount = 0) => {
+        increaseCountMembers()
             .then(res => {
-                context.setCount(res.count);
+                context.setCountMembers(res.countMembers);
             })
             .catch(async () => {
                 failCount++;
                 if (failCount < maxFailCount) {
                     await new Promise(resolve => setTimeout(resolve, 50));
-                    onUpClick(failCount);
+                    onUpClickMember(button, failCount);
                 } else {
                     setFailed(true);
                 }
             });
     }, [context]);
 
-    const onDownClick = useCallback((failCount = 0) => {
-        if (context.count > 0) {
-            decreaseCount()
+    const onDownClickMember = useCallback((button, failCount = 0) => {
+        if (context.countMembers > 0) {
+            decreaseCountMembers()
                 .then(res => {
-                    context.setCount(res.count);
+                    context.setCountMembers(res.countMembers);
                 })
                 .catch(async () => {
                     failCount++;
                     if (failCount < maxFailCount) {
                         await new Promise(resolve => setTimeout(resolve, 50));
-                        onDownClick(failCount);
+                        onDownClickMember(button, failCount);
                     } else {
                         setFailed(true);
                     }
@@ -49,16 +48,52 @@ function CounterPanel() {
         }
     }, [context]);
 
-    const onResetClick = useCallback((failCount = 0) => {
-        resetCount()
+    const onUpClickGuest = useCallback((button, failCount = 0) => {
+        increaseCountGuests()
             .then(res => {
-                context.setCount(res.count);
+                context.setCountGuests(res.countGuests);
             })
             .catch(async () => {
                 failCount++;
                 if (failCount < maxFailCount) {
                     await new Promise(resolve => setTimeout(resolve, 50));
-                    onResetClick(failCount);
+                    onUpClickGuest(button, failCount);
+                } else {
+                    setFailed(true);
+                }
+            });
+    }, [context]);
+
+    const onDownClickGuest = useCallback((button, failCount = 0) => {
+        if (context.countGuests > 0) {
+            decreaseCountGuests()
+                .then(res => {
+                    context.setCountGuests(res.countGuests);
+                })
+                .catch(async () => {
+                    failCount++;
+                    if (failCount < maxFailCount) {
+                        await new Promise(resolve => setTimeout(resolve, 50));
+                        onDownClickGuest(button, failCount);
+                    } else {
+                        setFailed(true);
+                    }
+                });
+        }
+    }, [context]);
+
+    const onResetClick = useCallback((button, failCount = 0) => {
+        resetCount()
+            .then(res => {
+                context.setCountMembers(res.countMembers);
+                context.setCountGuests(res.countGuests);
+            })
+            .catch(async () => {
+                console.log("Fail")
+                failCount++;
+                if (failCount < maxFailCount) {
+                    await new Promise(resolve => setTimeout(resolve, 50));
+                    onResetClick(button, failCount);
                 } else {
                     setFailed(true);
                 }
@@ -96,9 +131,8 @@ function CounterPanel() {
     }
     const invalidModalInput = maxCountModalState === undefined || Number.isNaN(maxCountModalState) || maxCountModalState < 0;
 
-    const onLiveSwitchChange = useCallback((event, failCount = 0) => {
+    const onLiveChange = useCallback((event, failCount = 0) => {
         console.log(event.target.checked);
-        setLiveSwitchState(event.target.checked);
         setLive(event.target.checked)
             .catch(async () => {
                 failCount++;
@@ -117,22 +151,46 @@ function CounterPanel() {
                 {failed && <Alert variant="danger">An error in connection to server...</Alert>}
                 <div id="live-panel" className="d-flex px-3 pt-3">
                     <FormControlLabel
-                        control={<IOSSwitch checked={liveSwitchState || false} onChange={onLiveSwitchChange} name="live-check" />}
-                        label={"Counter is " + (liveSwitchState ? "live" : "off")}
+                        control={<IOSSwitch checked={context.live|| false} onChange={onLiveChange} name="live-check" />}
+                        label={"Counter is " + (context.live ? "live" : "off")}
                     />
                 </div>
                 <div id="count-panel" className="d-flex justify-content-center">
-                    <div id="count-text" className="my-auto">{context.count}</div>
+                    <Col>
+                        <Row>
+                            <div id="count-text-big" className="my-auto">{context.countGuests === undefined || context.countMembers === undefined ? "" : context.countGuests + context.countMembers}</div>
+                        </Row>
+                        <Row>
+                            <Col>
+                                <div id="count-text-small" className="my-auto">{context.countGuests}</div>
+                            </Col>
+                            <Col>
+                                <div id="count-text-small" className="my-auto">{context.countMembers}</div>
+                            </Col>
+                        </Row>
+                    </Col>
                 </div>
                 <Col id="control-panel" className="flex-grow-1">
                     <Row id="click-controls">
                         <Col className="d-grid">
-                            <Button variant="danger" size="lg" className="btn-sign" disabled={failed} onClick={onDownClick}>
+                            <Button variant="danger" size="lg" className="btn-sign" disabled={failed} onClick={onDownClickMember}>
                                 -
                             </Button>
                         </Col>
                         <Col className="d-grid">
-                            <Button variant="success" size="lg" className="btn-sign" disabled={failed} onClick={onUpClick}>
+                            <Button variant="success" size="lg" className="btn-sign" disabled={failed} onClick={onUpClickMember}>
+                                +
+                            </Button>   
+                        </Col>
+                    </Row>
+                    <Row id="click-controls-guest">
+                        <Col className="d-grid">
+                            <Button variant="secondary" size="lg" className="btn-sign" disabled={failed} onClick={onDownClickGuest}>
+                                -
+                            </Button>   
+                        </Col>
+                        <Col className="d-grid">
+                            <Button variant="secondary" size="lg" className="btn-sign" disabled={failed} onClick={onUpClickGuest}>
                                 +
                             </Button>   
                         </Col>

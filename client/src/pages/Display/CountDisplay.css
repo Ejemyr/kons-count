@@ -2,23 +2,21 @@
     background: #FFFFFF 0% 0% no-repeat padding-box;
     border: 1vmin solid #FF9900;
     border-radius: 5vmin;
-    width: 25vmin;
-    height: 25vmin;
-    font-size: 10vmin;
-}
-
-.slash-box {
-    width: 10vmin;
-    height: 25vmin;
-    font-size: 10vmin;
+    width: 20vh;
+    height: 20vh;
+    font-size: 10vh;
 }
 
 #current-count-header {
     font-size: 5vmin;
-    margin-bottom: 4vmin;
+    margin-bottom: 2vmin;
+    position: fixed;
+    top: 0;
 }
 
 #last-reported-text {
     font-size: 3vmin;
     margin-top: 2vmin;
+    position: fixed;
+    bottom: 0;
 }

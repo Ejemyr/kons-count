@@ -1,7 +1,7 @@
 .outer-box {
     background: #E08206 0% 0% no-repeat padding-box;
     border: 1.5vmin solid hsl(36, 100%, 50%);
-	border-radius: 10vmin;
-    height: 40vmin;
-    width: 85vmin;
+    border-radius: 10vh;
+    height: 86vh;
+    width: 32vh;
 }

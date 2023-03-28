@@ -11,7 +11,8 @@ const auth = require('./authentication')
 
 
 var db = redis.createClient();
-const countKey = "count";
+const countMembersKey = "countMembers";
+const countGuestsKey = "countGuests";
 const maxCountKey = "maxCount";
 const lastUpdateKey = "lastUpdate";
 const liveKey = "live";
@@ -53,31 +54,46 @@ const requireLoggedIn = (req, res, next) => {
     }
 }
 
-const sendErrorOrCountResponse = (res, err, count) => {
+const sendErrorOrCountResponse = (res, err, countMembers=undefined, countGuests=undefined) => {
     if (err) {
         res.status(500).send({error: String(err)});
     } else {
-        res.json({count: parseInt(count)});
+        res.json({countMembers: parseInt(countMembers), countGuests: parseInt(countGuests)});
     }
     return res;
 };
 
 app.post('/count/reset', requireLoggedIn, (req, res) => {
-    db.SET(countKey, 0);
+    db.SET(countMembersKey, 0);
+    db.SET(countGuestsKey, 0);
     db.SET(lastUpdateKey, Math.round(Date.now() / 1000));
-    res.json({count: 0});
+    res.json({countMembers: 0, countGuests: 0});
 });
 
-app.post('/count/up', requireLoggedIn, (req, res) => {
-    db.INCR(countKey, (err, count) => {
-        res = sendErrorOrCountResponse(res, err, count);
+app.post('/count/members/up', requireLoggedIn, (req, res) => {
+    db.INCR(countMembersKey, (err, countMembers) => {
+        res = sendErrorOrCountResponse(res, err, countMembers, undefined);
     });
     db.SET(lastUpdateKey, Math.round(Date.now() / 1000));
 });
 
-app.post('/count/down', requireLoggedIn, (req, res) => {
-    db.DECR(countKey, (err, count) => {
-        res = sendErrorOrCountResponse(res, err, count);
+app.post('/count/members/down', requireLoggedIn, (req, res) => {
+    db.DECR(countMembersKey, (err, countMembers) => {
+        res = sendErrorOrCountResponse(res, err, countMembers, undefined);
+    });
+    db.SET(lastUpdateKey, Math.round(Date.now() / 1000));
+});
+
+app.post('/count/guests/up', requireLoggedIn, (req, res) => {
+    db.INCR(countGuestsKey, (err, countGuests) => {
+        res = sendErrorOrCountResponse(res, err, undefined, countGuests);
+    });
+    db.SET(lastUpdateKey, Math.round(Date.now() / 1000));
+});
+
+app.post('/count/guests/down', requireLoggedIn, (req, res) => {
+    db.DECR(countGuestsKey, (err, countGuests) => {
+        res = sendErrorOrCountResponse(res, err, undefined, countGuests);
     });
     db.SET(lastUpdateKey, Math.round(Date.now() / 1000));
 });
@@ -90,6 +106,7 @@ const getRedisValuePromise = (key) => {
     })
 }
 
+// TODO: Should this requireLoggedIn?
 app.post('/setLive', (req, res) => {
     try {
         if (req.body.value === "true" || req.body.value === "false") {
@@ -111,7 +128,8 @@ app.get('/countInfo', async (req, res) => {
     if (live === "true" || req.session?.authenticated) {
         resValue = {
             live: live,
-            count: await getRedisValuePromise(countKey),
+            countMembers: await getRedisValuePromise(countMembersKey),
+            countGuests: await getRedisValuePromise(countGuestsKey),
             lastUpdate: await getRedisValuePromise(lastUpdateKey),
             maxCount: await getRedisValuePromise(maxCountKey),
         };
@@ -163,7 +181,8 @@ app.get('/loggedin', (req, res) => {
 });
 
 app.listen(port, () => {
-    db.SETNX(countKey, "0");
+    db.SETNX(countMembersKey, "0");
+    db.SETNX(countGuestsKey, "0");
     db.SETNX(maxCountKey, "50");
     db.SETNX(lastUpdateKey, Math.round(Date.now() / 1000));
     db.SETNX(liveKey, "true");

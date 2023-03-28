@@ -12,11 +12,11 @@ import { CountContext } from './contexts';
 import { getCountInfo } from './serverUtils/count'
 
 function App() {
-
     const maxFailCount = 10;
 
     const [live, setLive] = useState(undefined);
-    const [count, setCount] = useState(undefined);
+    const [countMembers, setCountMembers] = useState(undefined);
+    const [countGuests, setCountGuests] = useState(undefined);
     const [lastUpdate, setLastUpdate] = useState(undefined);
     const [maxCount, setMaxCount] = useState(undefined);
     const [failed, setFailed] = useState(false);
@@ -25,7 +25,8 @@ function App() {
     const updateCountContext = useCallback(async () => {
         return await getCountInfo().then(countInfo => {
             setLive(countInfo.live === "true");
-            setCount(parseInt(countInfo?.count));
+            setCountMembers(parseInt(countInfo?.countMembers));
+            setCountGuests(parseInt(countInfo?.countGuests));
             setLastUpdate(parseInt(countInfo?.lastUpdate));
             setMaxCount(parseInt(countInfo?.maxCount));
             setFailed(false);
@@ -37,10 +38,10 @@ function App() {
     }, []);
 
     useEffect(() => {
-        if (count === undefined && failCount === 0) {
+        if (countMembers === undefined && countGuests === undefined && failCount === 0) {
             updateCountContext();
         }
-    }, [count, failCount, updateCountContext]);
+    }, [countMembers, countGuests, failCount, updateCountContext]);
 
     const updateAndCountFailures = useCallback(async () => {
         if (await updateCountContext()) {
@@ -63,15 +64,18 @@ function App() {
 
     const contextValue = {
         live: live,
-        count: count,
+        countMembers: countMembers,
+        countGuests: countGuests,
         lastUpdate: lastUpdate,
         maxCount: maxCount,
         failed: failed,
-        setCount: setCount
+        setCountMembers: setCountMembers,
+        setCountGuests: setCountGuests
     };
 
-    const rootPath = process.env.REACT_APP_ROOT_PATH || "";
 
+    const rootPath = process.env.REACT_APP_ROOT_PATH || "";
+    
     return (
         <Router basename={rootPath}>
             <div>
