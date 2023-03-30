@@ -1,9 +1,11 @@
 import { createContext } from 'react';
 
 export const CountContext = createContext({
-    count: undefined,
+    countMembers: undefined,
+    countGuests: undefined,
     lastUpdate: undefined,
     maxCount: undefined,
     failed: false,
-    setCount: (count) => {}
+    setCountMembers: (countMembers) => {},
+    setCountGuests: (countGuests) => {}
 });

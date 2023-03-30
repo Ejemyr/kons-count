@@ -2,7 +2,7 @@ import React from "react";
 import { Row, Col } from "react-bootstrap";
 import './CountDisplay.css';
 
-function CountDisplay({count, lastUpdate, maxCount} = {count: 0, lastUpdate: 0, maxCount: 0}) {
+function CountDisplay({countMembers, countGuests, lastUpdate, maxCount} = {countMembers: 0, countGuests : 0, lastUpdate: 0, maxCount: 0}) {
 
     var lastUpdateDateString = "--";
     if(lastUpdate !== undefined) {
@@ -28,8 +28,9 @@ function CountDisplay({count, lastUpdate, maxCount} = {count: 0, lastUpdate: 0, 
                 <Row className="justify-content-center">
                     <div className="outer-box">
                         <Row className="h-100 justify-content-center text-center">
-                            <div className="d-flex number-box my-auto justify-content-center"><div className="my-auto">{count}</div></div>
-                            <div className="d-flex slash-box my-auto justify-content-center"><div className="my-auto">/</div></div>
+                            <div className="d-flex number-box my-auto justify-content-center"><div className="my-auto">{countGuests}</div></div>
+                            <div className="d-flex number-box my-auto justify-content-center"><div className="my-auto">{countMembers}</div></div>
+                            <div className="d-flex number-box my-auto justify-content-center"><div className="my-auto">{countGuests === undefined || countMembers === undefined ? "" : countGuests + countMembers}</div></div>
                             <div className="d-flex number-box my-auto justify-content-center"><div className="my-auto">{maxCount}</div></div>
                         </Row>
                     </div>

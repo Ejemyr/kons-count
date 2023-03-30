@@ -14,33 +14,56 @@
 
 #count-panel {
     height: 40%;
+    margin: 0;
 }
 
-#count-panel #count-text {
+#count-panel #count-text-big {
+    line-height: 80%;
     color: #ccc;
     font-size: 30vh;
 }
 
+#count-panel #count-text-small {
+     line-height: 100%;
+    color: #ccc;
+    font-size: 20vmin;
+}
+
 #control-panel {
-    height: 45%;
+    height: 40%;
 }
 
 #click-controls {
     height: 70%;
-    padding: 0;
 }
 
 #click-controls .btn {
-    font-size: 15vmin;
-    margin: 1vmin;
+    font-size: 15vh;
+    margin: 1vh;
+}
+
+#click-controls-guest {
+    height: 30%;
+}
+
+#click-controls-guest .btn {
+    font-size: 5vh;
+    margin: 1vh;
 }
 
 #special-controls{
-    height: 30%;
+    height: 5vh;
     padding: 0;
 }
 
 #special-controls .btn {
-    font-size: 4vmin;
-    margin: 1vmin;
+    font-size: 4vh;
+    margin: 1vh;
+}
+
+.slash-box {
+    width: 10vmin;
+    height: 25vmin;
+    font-size: 10vmin;
+    color: #666;
 }
