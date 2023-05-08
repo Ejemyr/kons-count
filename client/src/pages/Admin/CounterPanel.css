@@ -24,7 +24,7 @@
 }
 
 #count-panel #count-text-small {
-     line-height: 100%;
+    line-height: 100%;
     color: #ccc;
     font-size: 20vmin;
 }
@@ -38,17 +38,19 @@
 }
 
 #click-controls .btn {
-    font-size: 15vh;
+    font-size: 10vh;
     margin: 1vh;
+    line-height: 80%;
 }
 
-#click-controls-guest {
-    height: 30%;
+#orange {
+		background-color: #ff642b;
+		border-color: #ff642b;
 }
 
-#click-controls-guest .btn {
-    font-size: 5vh;
-    margin: 1vh;
+
+#description {
+    color: #ccc;
 }
 
 #special-controls{

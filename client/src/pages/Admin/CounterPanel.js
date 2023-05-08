@@ -171,11 +171,15 @@ function CounterPanel() {
                     </Col>
                 </div>
                 <Col id="control-panel" className="flex-grow-1">
+										<Row id="description">
+                        <Col className="d-grid"> Guests </Col>
+                        <Col className="d-grid"> Members </Col>
+										</Row>
                     <Row id="click-controls">
                         <Col className="d-grid">
-                            <Button variant="danger" size="lg" className="btn-sign" disabled={failed} onClick={onDownClickMember}>
-                                -
-                            </Button>
+                            <Button variant="success" size="lg" className="btn-sign" disabled={failed} onClick={onUpClickGuest}>
+                                +
+                            </Button>   
                         </Col>
                         <Col className="d-grid">
                             <Button variant="success" size="lg" className="btn-sign" disabled={failed} onClick={onUpClickMember}>
@@ -183,27 +187,27 @@ function CounterPanel() {
                             </Button>   
                         </Col>
                     </Row>
-                    <Row id="click-controls-guest">
+                    <Row id="click-controls">
                         <Col className="d-grid">
-                            <Button variant="secondary" size="lg" className="btn-sign" disabled={failed} onClick={onDownClickGuest}>
+                            <Button variant="danger" size="lg" className="btn-sign" disabled={failed} onClick={onDownClickGuest}>
                                 -
                             </Button>   
                         </Col>
                         <Col className="d-grid">
-                            <Button variant="secondary" size="lg" className="btn-sign" disabled={failed} onClick={onUpClickGuest}>
-                                +
-                            </Button>   
+                            <Button id="orange" size="lg" className="btn-sign" disabled={failed} onClick={onDownClickMember}>
+                                -
+                            </Button>
                         </Col>
                     </Row>
                     <Row id="special-controls">
                         <Col className="d-grid">
                             <Button variant="warning" disabled={failed} onClick={onResetClick}>
-                                Reset count
+                                Reset
                             </Button>
                         </Col>
                         <Col className="d-grid">
                             <Button variant="light" disabled={failed} onClick={onSetMaxClick}>
-                                Change max ({context.maxCount})
+                                Max ({context.maxCount})
                             </Button>
                         </Col>
                     </Row>
