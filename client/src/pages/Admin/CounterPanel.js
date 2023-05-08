@@ -194,7 +194,7 @@ function CounterPanel() {
                             </Button>   
                         </Col>
                         <Col className="d-grid">
-                            <Button id="orange" size="lg" className="btn-sign" disabled={failed} onClick={onDownClickMember}>
+                            <Button id="orange-btn" size="lg" className="btn-sign" disabled={failed} onClick={onDownClickMember}>
                                 -
                             </Button>
                         </Col>
