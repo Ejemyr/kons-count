@@ -7,7 +7,7 @@ const cookieParser = require("cookie-parser");
 const bodyParser = require('body-parser');
 require('dotenv').config();
 
-const auth = require('./authentication')
+//const auth = require('./authentication')
 
 
 var db = redis.createClient();
@@ -47,11 +47,12 @@ app.use(session({
 }));
 
 const requireLoggedIn = (req, res, next) => {
-    if (req.session?.authenticated) {
-        next();
-    } else {
-        res.status(403).send();
-    }
+		next();
+//     if (req.session?.authenticated) {
+//         next();
+//     } else {
+//         res.status(403).send();
+//     }
 }
 
 const sendErrorOrCountResponse = (res, err, countMembers=undefined, countGuests=undefined) => {
@@ -159,16 +160,18 @@ app.post('/maxCount/set', requireLoggedIn, (req, res) => {
 });
 
 app.post('/login', (req, res) => {
-    auth.verifyAndGetUserID(req.body.token)
-        .then(userId => auth.checkPermissionToAccess(userId))
-        .then(authenticated => {
-            if (authenticated) {
-                req.session.authenticated = true;
-                res.status(200).json({loggedIn: true});
-            } else {
-                res.status(403).json({loggedIn: false});
-            }
-        }).finally("Someone tried...");
+		req.session.authenticated = true;
+		res.status(200).json({loggedIn: true});
+//     auth.verifyAndGetUserID(req.body.token)
+//         .then(userId => auth.checkPermissionToAccess(userId))
+//         .then(authenticated => {
+//             if (authenticated) {
+//                 req.session.authenticated = true;
+//                 res.status(200).json({loggedIn: true});
+//             } else {
+//                 res.status(403).json({loggedIn: false});
+//             }
+//         }).finally("Someone tried...");
 });
 
 app.post('/logout', (req, res) => {
@@ -177,7 +180,7 @@ app.post('/logout', (req, res) => {
 })
 
 app.get('/loggedin', (req, res) => {
-    res.json({loggedIn: req.session?.authenticated || false});
+    res.json({loggedIn: req.session?.authenticated || false || true});
 });
 
 app.listen(port, () => {
