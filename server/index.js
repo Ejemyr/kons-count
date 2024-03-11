@@ -10,7 +10,11 @@ require('dotenv').config();
 const auth = require('./authentication')
 
 
-var db = redis.createClient();
+var db = redis.createClient({
+        url: 'redis://redis:6379'
+    }
+);
+
 const countMembersKey = "countMembers";
 const countGuestsKey = "countGuests";
 const maxCountKey = "maxCount";
