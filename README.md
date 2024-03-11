@@ -1,11 +1,10 @@
 # kons-count
 Counter project for Konsulatet
 
-# Running localy
-The "local" branch should contain all edits to run locally (adding a server/.env file, removing authentication and enabling --openssl-legacy-provider).
+# Running
 
-To start this branch localy:
-1. Run npm install in both the server and client directory
-2. Start a redis server on your machine
-3. Run node on the server/index.js file
-4. Run npm start in the client directory
+## Static
+The static files are built as a release to this repository. They should be available under /counter, and any requests to this url that are do not match, should be sent to /counter/index.js. Note our clientid is used in the build.
+
+## Server
+The server is built as a docker container package to this repository. It requires a .env file mounted (see .env_template), and a service_account_auth_file.json for authentication to google in the same folder.
