@@ -11,7 +11,7 @@ const auth = require('./authentication')
 
 
 var db = redis.createClient({
-        url: 'redis://konst-count-redis:6379'
+        url: 'redis://kons-count-redis:6379'
     }
 );
 
