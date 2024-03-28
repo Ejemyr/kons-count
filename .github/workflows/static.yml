@@ -23,7 +23,7 @@ jobs:
         run: npm run build
       - name: Compress build
         working-directory: ./client
-        run: tar -czf ./build.tar.gz ./build/
+        run: tar -czf build.tar.gz -C build .
       - name: Release
         uses: softprops/action-gh-release@v1
         with:
